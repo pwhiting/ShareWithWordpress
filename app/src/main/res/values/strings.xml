@@ -2,5 +2,5 @@
     <string name="app_name">ShareWithWordpress</string>
     <string name="share_album">ShareAlbum</string>
     <string name="share_photo">SharePhoto</string>
-    <string name="text_to_view">Nothing here</string>
+    <string name="text_to_view">building string to paste</string>
 </resources>
