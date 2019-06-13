@@ -10,23 +10,25 @@ import org.jsoup.Jsoup
 
 class SharePhotoActivity : AppCompatActivity() {
 
-// should return below be replaced with finish()?
+    data class Shortcode (val type: String,val link: String) {
+        fun build(url: String): String = """[embed-google-$type link="$link" url="$url"]"""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (intent?.action == INTENT_TRIGGER) {
             val myClipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
-            val photoURL = intent.clipData?.getItemAt(0)?.coerceToText(this) ?: return
-            if (photoURL.startsWith(PHOTO_PAGE_URL,true)) {
+            val photoURL = intent.clipData?.getItemAt(0)?.coerceToText(this).toString() ?: return
+            if (photoURL.startsWith(PHOTO_PAGE_URL, true)) {
                 StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
                 val page = Jsoup.connect(photoURL.toString()).get()
-                val embedString = when (page.selectFirst(GOOGLE_CONTENT_TYPE).attr(CONTENT_ATTR).toString()) {
-                    "video" -> embedVideo(page.selectFirst(CSS_VIDEO).attr(CONTENT_ATTR).toString())
-                    "google_photos:single_photo" -> embedPhoto(page.selectFirst(CSS_PHOTO).attr(CONTENT_ATTR).toString())
-                    "google_photos:photo_album" -> embedAlbum(photoURL.toString())
+                val shortcode = when (page.selectFirst(GOOGLE_CONTENT_TYPE).attr(CONTENT_ATTR).toString()) {
+                    VIDEO -> Shortcode("video",page.selectFirst(CSS_VIDEO).attr(CONTENT_ATTR).toString())
+                    PHOTO -> Shortcode("photo",page.selectFirst(CSS_PHOTO).attr(CONTENT_ATTR).toString().substringBefore("="))
+                    ALBUM -> Shortcode("album",photoURL)
                     else -> return
                 }
-                myClipboard?.primaryClip = ClipData.newPlainText(":text", embedString)
+                myClipboard?.primaryClip = ClipData.newPlainText(":text", shortcode.build(photoURL))
                 startActivity(packageManager.getLaunchIntentForPackage(WORDPRESS))
 
             } else Toast.makeText(this, "can't parse $photoURL", Toast.LENGTH_SHORT).show()
@@ -34,12 +36,7 @@ class SharePhotoActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun embedAlbum(url: String) = """[embed-google-photos-album link="$url"]"""
-    private fun embedVideo(url: String) = """<div><video controls><source src=$url type="video/mp4"></video></div>"""
-    private fun embedPhoto(url: String): String {
-        val lessBigURL = url.substringBefore("=")
-        return """[img src="$lessBigURL"]"""
-    }
+    //    """<div><video controls><source src=$url type="video/mp4"></video></div>"""
 
     companion object {
         const val CONTENT_ATTR = "content"
@@ -49,6 +46,9 @@ class SharePhotoActivity : AppCompatActivity() {
         const val WORDPRESS = "org.wordpress.android"
         const val INTENT_TRIGGER =  "android.intent.action.SEND"
         const val PHOTO_PAGE_URL = "https://photos.app.goo.gl/"
+        const val VIDEO = "video"
+        const val ALBUM = "google_photos:photo_album"
+        const val PHOTO = "google_photos:single_photo"
     }
 }
 
