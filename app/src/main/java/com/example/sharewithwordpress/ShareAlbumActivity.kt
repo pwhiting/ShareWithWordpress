@@ -12,22 +12,22 @@ import android.widget.Toast
 class ShareAlbumActivity :AppCompatActivity() {
 
     
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //if (intent == null) return
-        if (intent?.action == "android.intent.action.SEND") {
-            val myClipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
-            //val photoURL = intent.data ?: return
-            val photoURL =intent.clipData?.getItemAt(0)?.coerceToText(this)?: return
-            if(Shared.photoPageUrlRegex.matches(photoURL)) {
-                myClipboard?.primaryClip = ClipData.newPlainText(":text", shortcodeString(photoURL.toString()))
-                Toast.makeText(this, "shortcode created", Toast.LENGTH_SHORT).show()
-                startActivity(packageManager.getLaunchIntentForPackage(Shared.WORDPRESS))
-            } else {
-                Toast.makeText(this, "can't parse $photoURL", Toast.LENGTH_SHORT).show()
-            }
-        }
-        finish()
-    }
-    private fun shortcodeString(url: String) = """[embed-google-photos-album link="$url"]"""
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        //if (intent == null) return
+//        if (intent?.action == "android.intent.action.SEND") {
+//            val myClipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+//            //val photoURL = intent.data ?: return
+//            val photoURL =intent.clipData?.getItemAt(0)?.coerceToText(this)?: return
+//            if(photoPageUrlRegex.matches(photoURL)) {
+//                myClipboard?.primaryClip = ClipData.newPlainText(":text", shortcodeString(photoURL.toString()))
+//                Toast.makeText(this, "shortcode created", Toast.LENGTH_SHORT).show()
+//                startActivity(packageManager.getLaunchIntentForPackage(Shared.WORDPRESS))
+//            } else {
+//                Toast.makeText(this, "can't parse $photoURL", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        finish()
+//    }
+//    private fun shortcodeString(url: String) = """[embed-google-photos-album link="$url"]"""
 }

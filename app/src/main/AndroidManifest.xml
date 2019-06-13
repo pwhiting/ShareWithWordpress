@@ -17,14 +17,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ShareAlbumActivity"
-                  android:label="@string/share_album">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
-            </intent-filter>
-        </activity>
+        <!--<activity android:name=".ShareAlbumActivity"-->
+                  <!--android:label="@string/share_album">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.SEND"/>-->
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+                <!--<data android:mimeType="text/plain"/>-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
         <activity android:name=".SharePhotoActivity"
                   android:label="@string/share_photo">
             <intent-filter>
