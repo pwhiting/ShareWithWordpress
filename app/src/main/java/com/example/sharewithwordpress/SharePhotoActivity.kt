@@ -17,7 +17,8 @@ class SharePhotoActivity : AppCompatActivity() {
         if (intent?.action == INTENT_TRIGGER) {
             val myClipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
             val photoURL = intent.clipData?.getItemAt(0)?.coerceToText(this) ?: return
-            if (photoPageUrlRegex.matches(photoURL)) {
+            photoURL.substring
+            if (photoURL.startsWith(PHOTO_PAGE_URL,true)) {
                 StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
                 val page = Jsoup.connect(photoURL.toString()).get()
                 val embedString = when (page.selectFirst(GOOGLE_CONTENT_TYPE).attr(CONTENT_ATTR).toString()) {
@@ -37,19 +38,18 @@ class SharePhotoActivity : AppCompatActivity() {
     private fun embedAlbum(url: String) = """[embed-google-photos-album link="$url"]"""
     private fun embedVideo(url: String) = """<div><video controls><source src=$url type="video/mp4"></video></div>"""
     private fun embedPhoto(url: String): String {
-        val (lessBigURL) = photoUrlRegex.find(url)!!.destructured
+        val lessBigURL = url.substringBefore("=")
         return """[img src="$lessBigURL"]"""
     }
 
     companion object {
-        val CONTENT_ATTR = "content"
-        val GOOGLE_CONTENT_TYPE = """meta[property=og:type]"""
-        val CSS_VIDEO = """meta[property=og:video][content^=https://lh3]"""
-        val CSS_PHOTO = """meta[property=og:image][content^=https://lh3]"""
-        val WORDPRESS = "org.wordpress.android"
-        val photoPageUrlRegex = "https://photos.app.goo.gl/.*".toRegex()
-        val photoUrlRegex = "(https://[^=]*)".toRegex()
-        val INTENT_TRIGGER =  "android.intent.action.SEND"
+        const val CONTENT_ATTR = "content"
+        const val GOOGLE_CONTENT_TYPE = """meta[property=og:type]"""
+        const val CSS_VIDEO = """meta[property=og:video][content^=https://lh3]"""
+        const val CSS_PHOTO = """meta[property=og:image][content^=https://lh3]"""
+        const val WORDPRESS = "org.wordpress.android"
+        const val INTENT_TRIGGER =  "android.intent.action.SEND"
+        const val PHOTO_PAGE_URL = "https://photos.app.goo.gl/"
     }
 }
 
