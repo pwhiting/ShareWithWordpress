@@ -44,11 +44,7 @@ class SharePhotoActivity : AppCompatActivity() {
         val (lessBigURL) = photoUrlRegex.find(url)!!.destructured
         return """[img src="$lessBigURL"]"""
     }
-    private fun makeVideoEmbed(url: String): String {
-        val (lessBigURL) = photoUrlRegex.find(url)!!.destructured
-        return """<div><video></video></div>"""
-
-    }
+    private fun makeVideoEmbed(url: String) = """<div><video controls><source src=$url type="video/mp4"></video></div>"""
 
     companion object {
         val CONTENT = "content"
