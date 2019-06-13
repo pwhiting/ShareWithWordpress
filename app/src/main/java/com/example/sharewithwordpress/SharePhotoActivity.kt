@@ -17,7 +17,6 @@ class SharePhotoActivity : AppCompatActivity() {
         if (intent?.action == INTENT_TRIGGER) {
             val myClipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
             val photoURL = intent.clipData?.getItemAt(0)?.coerceToText(this) ?: return
-            photoURL.substring
             if (photoURL.startsWith(PHOTO_PAGE_URL,true)) {
                 StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
                 val page = Jsoup.connect(photoURL.toString()).get()
