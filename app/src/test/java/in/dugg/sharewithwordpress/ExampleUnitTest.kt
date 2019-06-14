@@ -1,4 +1,4 @@
-package com.example.sharewithwordpress
+package `in`.dugg.sharewithwordpress
 
 import org.junit.Test
 

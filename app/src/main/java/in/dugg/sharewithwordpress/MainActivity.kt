@@ -1,7 +1,8 @@
-package com.example.sharewithwordpress
+package `in`.dugg.sharewithwordpress
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+
 
 // adb shell am start com.example.ShareWithWordpress/.SimpleActivity --es "Message" "hello!"
 

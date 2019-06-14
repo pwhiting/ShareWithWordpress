@@ -1,4 +1,4 @@
-package com.example.sharewithwordpress
+package `in`.dugg.sharewithwordpress
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
